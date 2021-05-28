@@ -19,8 +19,10 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         switch (call.method) {
         case "init":
-            if let unitId = call.arguments as? String {
-                appLovinInit(unitId)
+            if let dic = call.arguments as? [String: Any?] {
+                if let unitId = dic["unitId"] as? String {
+                    appLovinInit(unitId)
+                }
             } else {
                 // TODO: Throw some info to flutter
             }
@@ -47,19 +49,35 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
         
         rewardedAd = MARewardedAd.shared(withAdUnitIdentifier: unitId)
         rewardedAd?.delegate = self
+        
+        rewardedAd?.load()
     }
 }
 
 func mapMAAd(_ ad: MAAd) -> [String : Any?] {
     return [
-        "format": ad.format,
-        "adUnitIdentifier": ad.adUnitIdentifier,
+        "format": converMAAdFormatToString(ad.format),
         "adUnitIdentifier": ad.adUnitIdentifier,
         "networkName": ad.networkName,
         "creativeIdentifier": ad.creativeIdentifier,
         "revenue": ad.revenue,
         "placement": ad.placement,
     ]
+}
+
+func converMAAdFormatToString(_ format: MAAdFormat) -> String {
+    switch format {
+    case MAAdFormat.banner: return "banner"
+    case MAAdFormat.crossPromo: return "crossPromo"
+    case MAAdFormat.interstitial: return "interstitial"
+    case MAAdFormat.leader: return "leader"
+    case MAAdFormat.mrec: return "mrec"
+    case MAAdFormat.native: return "native"
+    case MAAdFormat.rewarded: return "rewarded"
+    case MAAdFormat.rewardedInterstitial: return "rewardedInterstitial"
+    default:
+        return "unknown"
+    }
 }
 
 public extension SwiftFlutterApplovinPlugin {
