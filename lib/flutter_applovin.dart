@@ -17,7 +17,23 @@ enum AppLovionStatus {
   didRewardUser,
 }
 
-class AppLovinAdInfo {}
+class AppLovinAdInfo {
+  AppLovinAdInfo({
+    this.format = '',
+    this.adUnitIdentifier = '',
+    this.networkName = '',
+    this.creativeIdentifier = '',
+    this.revenue = -1,
+    this.placement = '',
+  });
+
+  final String format;
+  final String adUnitIdentifier;
+  final String networkName;
+  final String creativeIdentifier;
+  final double revenue;
+  final String placement;
+}
 
 typedef AppLovinCallback = Function(AppLovionStatus status, AppLovinAdInfo info);
 
@@ -65,6 +81,24 @@ class FlutterApplovin {
   }
 
   static AppLovinAdInfo appLovinAdInfoFrom(dynamic value) {
-    return AppLovinAdInfo();
+    try {
+      final Map<dynamic, dynamic> map = value as Map<dynamic, dynamic>;
+      final String format = (map['format'] as String?) ?? '';
+      final String adUnitIdentifier = (map['adUnitIdentifier'] as String?) ?? '';
+      final String networkName = (map['networkName'] as String?) ?? '';
+      final String creativeIdentifier = (map['creativeIdentifier'] as String?) ?? '';
+      final double revenue = (map['revenue'] as double?) ?? 0;
+      final String placement = (map['placement'] as String?) ?? '';
+      return AppLovinAdInfo(
+        format: format,
+        adUnitIdentifier: adUnitIdentifier,
+        networkName: networkName,
+        creativeIdentifier: creativeIdentifier,
+        revenue: revenue,
+        placement: placement,
+      );
+    } catch (e) {
+      return AppLovinAdInfo();
+    }
   }
 }
