@@ -112,7 +112,7 @@ public extension SwiftFlutterApplovinPlugin {
     }
 
     func didFail(toDisplay ad: MAAd, withError error: MAError) {
-        SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didFail", arguments: mapMAAd(ad))
+        SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didFailToDisplay", arguments: mapMAAd(ad))
         // Rewarded ad failed to display. We recommend loading the next ad
         rewardedAd?.load()
     }

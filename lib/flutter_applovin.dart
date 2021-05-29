@@ -10,7 +10,7 @@ enum AppLovionStatus {
   didDisplay,
   didClick,
   didHide,
-  didFail,
+  didFailToDisplay,
   didPayRevenue,
   didStartRewardedVideo,
   didCompleteRewardedVideo,
@@ -65,8 +65,8 @@ class FlutterApplovin {
         return AppLovionStatus.didClick;
       case 'didHide':
         return AppLovionStatus.didHide;
-      case 'didFail':
-        return AppLovionStatus.didFail;
+      case 'didFailToDisplay':
+        return AppLovionStatus.didFailToDisplay;
       case 'didPayRevenue':
         return AppLovionStatus.didPayRevenue;
       case 'didStartRewardedVideo':
@@ -76,7 +76,7 @@ class FlutterApplovin {
       case 'didRewardUser':
         return AppLovionStatus.didRewardUser;
       default:
-        return AppLovionStatus.didFail;
+        return AppLovionStatus.didFailToLoadAd;
     }
   }
 
