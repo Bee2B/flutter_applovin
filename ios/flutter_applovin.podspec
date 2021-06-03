@@ -26,6 +26,7 @@ A new Flutter project.
     s.dependency 'AppLovinMediationVungleAdapter'
     s.dependency 'AppLovinMediationChartboostAdapter'
     s.dependency 'AppLovinMediationFyberAdapter'
+    s.dependency 'AppLovinMediationMintegralAdapter'
     s.dependency 'AppLovinMediationGoogleAdapter'
     s.dependency 'AppLovinMediationGoogleAdManagerAdapter'
     s.dependency 'AppLovinMediationIronSourceAdapter'
