@@ -87,7 +87,7 @@ class FlutterApplovin {
       final String adUnitIdentifier = (map['adUnitIdentifier'] as String?) ?? '';
       final String networkName = (map['networkName'] as String?) ?? '';
       final String creativeIdentifier = (map['creativeIdentifier'] as String?) ?? '';
-      final double revenue = (map['revenue'] as double?) ?? 0;
+      final double revenue = (map['revenue'] as double?) ?? -1;
       final String placement = (map['placement'] as String?) ?? '';
       return AppLovinAdInfo(
         format: format,
