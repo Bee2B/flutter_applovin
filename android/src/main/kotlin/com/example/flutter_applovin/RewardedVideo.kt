@@ -28,7 +28,6 @@ class RewardedVideo(unitId: String, private var plugin: FlutterApplovinPlugin) :
         return rewardedAd.isReady
     }
 
-
     override fun onAdLoaded(ad: MaxAd?) {
         retryAttempt = 0
         plugin.callback("onAdLoaded", mapMAAd(ad))
@@ -45,10 +44,6 @@ class RewardedVideo(unitId: String, private var plugin: FlutterApplovinPlugin) :
 
     override fun onAdClicked(ad: MaxAd?) {
         plugin.callback("didClick", mapMAAd(ad))
-    }
-
-    override fun onAdRevenuePaid(ad: MaxAd?) {
-        plugin.callback("didPayRevenue", mapMAAd(ad))
     }
 
     override fun onAdLoadFailed(adUnitId: String?, error: MaxError?) {
@@ -76,10 +71,10 @@ class RewardedVideo(unitId: String, private var plugin: FlutterApplovinPlugin) :
     }
 
     private fun mapMAAd(ad: MaxAd?): Map<String, Any> {
-        if (ad == null) {
-            return mapOf()
+        return if (ad == null) {
+            mapOf()
         } else {
-            return mapOf(
+            mapOf(
                     Pair("format", convertMAAdFormatToString(ad.format)),
                     Pair("adUnitIdentifier", ad.adUnitId),
                     Pair("networkName", ad.networkName),
