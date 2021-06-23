@@ -11,8 +11,8 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import java.lang.Exception
-import com.applovin.sdk.AppLovinMediationProvider;
-import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinMediationProvider
+import com.applovin.sdk.AppLovinSdk
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 
@@ -24,6 +24,7 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     lateinit var activity: Activity
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        flutterPluginBinding.platformViewRegistry.registerViewFactory("AppLovinBanner", AppBannerFactory())
         context = flutterPluginBinding.applicationContext
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_applovin")
         channel.setMethodCallHandler(this)

@@ -1,9 +1,10 @@
 package com.example.flutter_applovin
 
 import com.applovin.mediation.*
-import com.applovin.mediation.ads.MaxRewardedAd;
+import com.applovin.mediation.ads.MaxRewardedAd
 import java.lang.Exception
 import java.util.*
+
 
 class RewardedVideo(unitId: String, private var plugin: FlutterApplovinPlugin) : MaxRewardedAdListener {
     private var rewardedAd: MaxRewardedAd = MaxRewardedAd.getInstance(unitId, plugin.activity)
