@@ -23,7 +23,9 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
                 if let unitId = dic["unitId"] as? String {
                     appLovinInit(unitId)
                 }
+                result(true)
             } else {
+                result(false)
                 // TODO: Throw some info to flutter
             }
         case "showRewardVideo":

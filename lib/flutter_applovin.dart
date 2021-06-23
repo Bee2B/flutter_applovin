@@ -40,8 +40,8 @@ typedef AppLovinCallback = Function(AppLovionStatus status, AppLovinAdInfo info)
 class FlutterApplovin {
   static const MethodChannel _channel = MethodChannel('flutter_applovin');
 
-  static Future<void> init(String unitId) {
-    return _channel.invokeMethod<void>('init', <String, dynamic>{'unitId': unitId});
+  static Future<bool> init(String unitId) async {
+    return await _channel.invokeMethod<bool>('init', <String, dynamic>{'unitId': unitId}) ?? false;
   }
 
   static Future<void> showRewordVideo(AppLovinCallback callback) async {
