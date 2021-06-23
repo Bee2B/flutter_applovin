@@ -8,11 +8,14 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
     var retryAttempt = 0.0
     
     static var methodChannel: FlutterMethodChannel!
-
+    
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "flutter_applovin", binaryMessenger: registrar.messenger())
         let instance = SwiftFlutterApplovinPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        let appLovinBannerFactory = AppLovinBannerFactory(messenger: registrar.messenger())
+        registrar.register(appLovinBannerFactory, withId: "AppLovinBanner")
         methodChannel = channel
     }
     
@@ -88,7 +91,7 @@ public extension SwiftFlutterApplovinPlugin {
         retryAttempt = 0
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didLoad", arguments: mapMAAd(ad))
     }
-
+    
     func didFailToLoadAd(forAdUnitIdentifier adUnitIdentifier: String, withError error: MAError) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didFailToLoadAd", arguments: nil)
         retryAttempt += 1
@@ -98,43 +101,107 @@ public extension SwiftFlutterApplovinPlugin {
         }
         
     }
-
+    
     func didDisplay(_ ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didDisplay", arguments: mapMAAd(ad))
     }
-
+    
     func didClick(_ ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didClick", arguments: mapMAAd(ad))
     }
-
+    
     func didHide(_ ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didHide", arguments: mapMAAd(ad))
         // Rewarded ad is hidden. Pre-load the next ad
         rewardedAd?.load()
     }
-
+    
     func didFail(toDisplay ad: MAAd, withError error: MAError) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didFailToDisplay", arguments: mapMAAd(ad))
         // Rewarded ad failed to display. We recommend loading the next ad
         rewardedAd?.load()
     }
-
+    
     func didPayRevenue(for ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didPayRevenue", arguments: mapMAAd(ad))
     }
-
+    
     // MARK: MARewardedAdDelegate Protocol
-
+    
     func didStartRewardedVideo(for ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didStartRewardedVideo", arguments: mapMAAd(ad))
     }
-
+    
     func didCompleteRewardedVideo(for ad: MAAd) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didCompleteRewardedVideo", arguments: mapMAAd(ad))
     }
-
+    
     func didRewardUser(for ad: MAAd, with reward: MAReward) {
         SwiftFlutterApplovinPlugin.methodChannel.invokeMethod("didRewardUser", arguments: mapMAAd(ad))
     }
 }
 
+
+class AppLovinBannerFactory: NSObject, FlutterPlatformViewFactory {
+    private var messenger: FlutterBinaryMessenger
+    
+    init(messenger: FlutterBinaryMessenger) {
+        self.messenger = messenger
+        super.init()
+    }
+    
+    func create(
+        withFrame frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?
+    ) -> FlutterPlatformView {
+        return AppLovinBanner(
+            frame: frame,
+            viewIdentifier: viewId,
+            arguments: args,
+            binaryMessenger: messenger)
+    }
+}
+
+class AppLovinBanner: NSObject, FlutterPlatformView {
+    private var _view: UIView
+    
+    init(
+        frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?,
+        binaryMessenger messenger: FlutterBinaryMessenger?
+    ) {
+        _view = UIView()
+        super.init()
+        
+        var w: Double = 400
+        var h: Double = 80
+        if let a = args as? [String:Any] {
+            w = a["width"] as? Double ?? w
+            h = a["height"] as? Double ?? h
+        }
+        createNativeView(view: _view, frame: CGRect(x: 0, y: 0, width: w, height: h))
+
+    }
+    
+    func view() -> UIView {
+        return _view
+    }
+    
+    func createNativeView(view _view: UIView, frame: CGRect){
+        if let sdk = ALSdk.shared() {
+            let adView = ALAdView(frame: CGRect(x: 0, y: 0, width: 400, height: 120), size: ALAdSize.banner, sdk: sdk)
+            adView.loadNextAd()
+            print("called")
+            print(frame)
+            _view.addSubview(adView)
+            DispatchQueue.main.asyncAfter(deadline: .now()+3) {
+                adView.loadNextAd()
+                print("called again")
+            }
+        } else {
+            print("wow!")
+        }
+    }
+}
