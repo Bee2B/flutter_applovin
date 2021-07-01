@@ -18,15 +18,16 @@ internal class AppBannerView(context: Context, id: Int, createParams: Map<String
     }
 
     override fun dispose() {
+        view.destroy()
     }
 
     init {
-        view = AppLovinAdView(AppLovinSdk.getInstance(context), AppLovinAdSize.BANNER, context)
+        view = AppLovinAdView(AppLovinSdk.getInstance(FlutterApplovinPlugin.activity), AppLovinAdSize.BANNER, context)
         view.loadNextAd()
     }
 
     override fun adClicked(ad: AppLovinAd?) {
-        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+//        print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
         view.loadNextAd()
     }
 }
