@@ -61,8 +61,8 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun appLovinInit(unitId: String, @NonNull result: Result) {
+        AppLovinSdk.getInstance(activity).mediationProvider = AppLovinMediationProvider.MAX
         AppLovinSdk.getInstance(activity).initializeSdk {
-            AppLovinSdk.getInstance(activity).mediationProvider = AppLovinMediationProvider.MAX
             rewardInstance = RewardedVideo(unitId, this)
             result.success(true)
         }
