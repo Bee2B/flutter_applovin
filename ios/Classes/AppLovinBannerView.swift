@@ -27,7 +27,7 @@ public class AppLovinBannerFactory: NSObject, FlutterPlatformViewFactory {
 }
 
 public class AppLovinBanner: NSObject, FlutterPlatformView {
-    private var _view: UIView
+    private var _view: MAAdView!
     
     init(
         frame: CGRect,
@@ -35,30 +35,35 @@ public class AppLovinBanner: NSObject, FlutterPlatformView {
         arguments args: Any?,
         binaryMessenger messenger: FlutterBinaryMessenger?
     ) {
-        _view = UIView()
         super.init()
         
-        var w: Double = 375
-        var h: Double = 64
         if let a = args as? [String:Any] {
-            w = a["width"] as? Double ?? w
-            h = a["height"] as? Double ?? h
+            _view = MAAdView(adUnitIdentifier: a["unit"] as! String)
+            _view.delegate = self
+            _view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
+            _view.loadAd()
         }
-        createNativeView(view: _view, frame: CGRect(x: 0, y: 0, width: w, height: h))
     }
     
     public func view() -> UIView {
         return _view
     }
+}
+
+extension AppLovinBanner: MAAdViewAdDelegate {
+    public func didLoad(_ ad: MAAd) {}
+
+    public func didFailToLoadAd(forAdUnitIdentifier adUnitIdentifier: String, withError error: MAError) {}
+
+    public func didClick(_ ad: MAAd) {}
+
+    public func didFail(toDisplay ad: MAAd, withError error: MAError) {}
+
+    public func didExpand(_ ad: MAAd) {}
+
+    public func didCollapse(_ ad: MAAd) {}
     
-    func createNativeView(view _view: UIView, frame: CGRect){
-        if let sdk = ALSdk.shared() {
-            let adView = ALAdView(frame: CGRect(x: 0, y: 0, width: 400, height: 120), size: ALAdSize.banner, sdk: sdk)
-            adView.loadNextAd()
-            adView.isAutoloadEnabled = true
-            _view.addSubview(adView)
-        } else {
-            print("wow!")
-        }
-    }
+    // MARK: Deprecated Callbacks
+    public func didDisplay(_ ad: MAAd) {}
+    public func didHide(_ ad: MAAd) {}
 }

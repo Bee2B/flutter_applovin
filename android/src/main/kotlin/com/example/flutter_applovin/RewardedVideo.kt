@@ -7,7 +7,7 @@ import java.util.*
 
 
 class RewardedVideo(unitId: String, private var plugin: FlutterApplovinPlugin) : MaxRewardedAdListener {
-    private var rewardedAd: MaxRewardedAd = MaxRewardedAd.getInstance(unitId, plugin.activity)
+    private var rewardedAd: MaxRewardedAd = MaxRewardedAd.getInstance(unitId, FlutterApplovinPlugin.activity)
     private var retryAttempt: Int = 0
 
     init {

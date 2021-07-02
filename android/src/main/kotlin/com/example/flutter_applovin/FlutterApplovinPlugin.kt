@@ -21,7 +21,9 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private lateinit var channel: MethodChannel
     private lateinit var context: Context
     private lateinit var rewardInstance: RewardedVideo
-    lateinit var activity: Activity
+    companion object {
+        lateinit var activity: Activity
+    }
 
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         flutterPluginBinding.platformViewRegistry.registerViewFactory("AppLovinBanner", AppBannerFactory())
@@ -59,13 +61,16 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     private fun appLovinInit(unitId: String, @NonNull result: Result) {
-        AppLovinSdk.getInstance(context).mediationProvider = AppLovinMediationProvider.MAX
-        rewardInstance = RewardedVideo(unitId, this)
-        result.success(true)
+        AppLovinSdk.getInstance(activity).mediationProvider = AppLovinMediationProvider.MAX
+        AppLovinSdk.getInstance(activity).initializeSdk {
+            rewardInstance = RewardedVideo(unitId, this)
+            result.success(true)
+        }
+//        result.success(true)
     }
 
     fun callback(method: String, arguments: Map<String, *>) {
-        this.activity.runOnUiThread( Runnable {
+        FlutterApplovinPlugin.activity.runOnUiThread( Runnable {
             kotlin.run {
                 this.channel.invokeMethod(method, arguments)
             }
@@ -73,7 +78,7 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        FlutterApplovinPlugin.activity = binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -81,7 +86,7 @@ class FlutterApplovinPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        activity = binding.activity
+        FlutterApplovinPlugin.activity = binding.activity
     }
 
     override fun onDetachedFromActivity() {
