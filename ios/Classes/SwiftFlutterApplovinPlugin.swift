@@ -24,12 +24,10 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
         case "init":
             if let dic = call.arguments as? [String: Any?] {
                 if let unitId = dic["unitId"] as? String {
-                    appLovinInit(unitId)
+                    appLovinInit(unitId, result: result)
                 }
-                result(true)
             } else {
                 result(false)
-                // TODO: Throw some info to flutter
             }
         case "showRewardVideo":
             if let ad = rewardedAd {
@@ -47,15 +45,15 @@ public class SwiftFlutterApplovinPlugin: NSObject, FlutterPlugin, MARewardedAdDe
         }
     }
     
-    func appLovinInit(_ unitId: String) {
+    func appLovinInit(_ unitId: String, result: @escaping FlutterResult) {
         ALSdk.shared()!.mediationProvider = "max"
         ALSdk.shared()!.initializeSdk { (configuration: ALSdkConfiguration) in
+            self.rewardedAd = MARewardedAd.shared(withAdUnitIdentifier: unitId)
+            self.rewardedAd?.delegate = self
+            self.rewardedAd?.load()
+            result(true)
         }
         
-        rewardedAd = MARewardedAd.shared(withAdUnitIdentifier: unitId)
-        rewardedAd?.delegate = self
-        
-        rewardedAd?.load()
     }
 }
 
