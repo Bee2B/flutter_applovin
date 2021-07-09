@@ -29,7 +29,7 @@ internal class AppBannerView(context: Context, id: Int, createParams: Map<String
 
     init {
         view = MaxAdView(createParams?.get("unit") as String, FlutterApplovinPlugin.activity)
-        view!!.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, createParams["height"] as Int)
+        view!!.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         view!!.setListener(this)
         view!!.loadAd()
     }
