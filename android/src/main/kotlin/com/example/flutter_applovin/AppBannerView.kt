@@ -2,6 +2,7 @@ package com.example.flutter_applovin
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.applovin.adview.AppLovinAdView
 import com.applovin.mediation.MaxAd
@@ -28,6 +29,7 @@ internal class AppBannerView(context: Context, id: Int, createParams: Map<String
 
     init {
         view = MaxAdView(createParams?.get("unit") as String, FlutterApplovinPlugin.activity)
+        view!!.layoutParams = FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, createParams["height"] as Int)
         view!!.setListener(this)
         view!!.loadAd()
     }

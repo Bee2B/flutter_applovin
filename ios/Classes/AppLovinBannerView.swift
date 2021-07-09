@@ -40,7 +40,7 @@ public class AppLovinBanner: NSObject, FlutterPlatformView {
         if let a = args as? [String:Any] {
             _view = MAAdView(adUnitIdentifier: a["unit"] as! String)
             _view.delegate = self
-            _view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
+            _view.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: a["height"] as! CGFloat)
             _view.loadAd()
         }
     }
