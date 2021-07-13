@@ -44,7 +44,7 @@ class FlutterApplovin {
     return await _channel.invokeMethod<bool>('init', <String, dynamic>{'unitId': unitId}) ?? false;
   }
 
-  static Future<void> showRewordVideo(AppLovinCallback callback) async {
+  static Future<void> showRewardVideo(AppLovinCallback callback) async {
     _channel.setMethodCallHandler((MethodCall call) async => callback(appLovionStatusFrom(call.method), appLovinAdInfoFrom(call.arguments)));
     await _channel.invokeMethod<void>('showRewardVideo');
   }
